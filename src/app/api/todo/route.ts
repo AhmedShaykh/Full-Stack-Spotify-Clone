@@ -7,12 +7,16 @@ export async function GET(request: NextRequest) {
 
     try {
 
-    } catch (error) {
+        await client.sql`CREATE TABLE IF NOT EXISTS TODOS(ID serial, TASK varchar(255))`;
 
-        return NextResponse.json({ error }, {
-            status: 500,
-        });
+        return NextResponse.json({ message: "Call API" });
+
+    } catch (err) {
+
+        console.log(err);
+
+        return NextResponse.json({ message: "Something Went Wrong" });
 
     }
-    return NextResponse.json({ message: "Call API" });
+
 };
