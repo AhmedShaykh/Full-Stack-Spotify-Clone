@@ -11,8 +11,6 @@ export async function GET(request: NextRequest) {
 
         const res: QueryResult = await client.sql`SELECT * FROM TODOS`;
 
-        // console.log(res.rows.find(item => item.id === 4));
-
         return NextResponse.json({ response: res.rows });
 
     } catch (err) {
