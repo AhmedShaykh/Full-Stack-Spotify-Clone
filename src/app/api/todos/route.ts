@@ -1,21 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { QueryResult, db } from '@vercel/postgres';
+import { Todos, db, todosTable } from "@/lib/drizzle";
+import { sql } from "@vercel/postgres";
 
 export async function GET(request: NextRequest) {
 
-    const client = await db.connect();
-
     try {
 
-        await client.sql`CREATE TABLE IF NOT EXISTS TODOS(ID serial, TASK varchar(255))`;
+        await sql`CREATE TABLE IF NOT EXISTS TODOS(ID serial, TASK varchar(255))`;
 
-        const res: QueryResult = await client.sql`SELECT * FROM TODOS`;
+        const res: Todos[] = await db.select().from(todosTable);
 
-        return NextResponse.json({ response: res.rows });
+        return NextResponse.json({ response: res });
 
     } catch (err) {
 
-        console.log(err);
+        console.log((err as { message: string }).message);
 
         return NextResponse.json({ message: "Something Went Wrong" });
 
@@ -25,15 +24,13 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
 
-    const client = await db.connect();
-
     const reqData = await request.json();
 
     try {
 
         if (reqData.TASK) {
 
-            const res: QueryResult = await client.sql`INSERT INTO Todos(Task) VALUES(${reqData.TASK})`;
+            const res = await sql`INSERT INTO Todos(Task) VALUES(${reqData.TASK})`;
 
             console.log(res);
 
