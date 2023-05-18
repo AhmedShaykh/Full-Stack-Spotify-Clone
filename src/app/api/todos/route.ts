@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Todos, db, todosTable } from "@/lib/drizzle";
+import { NewTodos, Todos, db, todosTable } from "@/lib/drizzle";
 import { sql } from "@vercel/postgres";
 
 export async function GET(request: NextRequest) {
@@ -30,7 +30,9 @@ export async function POST(request: NextRequest) {
 
         if (reqData.TASK) {
 
-            const res = await sql`INSERT INTO Todos(Task) VALUES(${reqData.TASK})`;
+            const res: NewTodos[] = await db.insert(todosTable).values({
+                task: reqData.TASK
+            }).returning();
 
             console.log(res);
 
