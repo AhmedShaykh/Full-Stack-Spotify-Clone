@@ -1,1 +1,1 @@
-# Spotify Clone!
+# Full Stack Spotify Clone!
