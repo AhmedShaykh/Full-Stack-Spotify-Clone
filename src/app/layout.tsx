@@ -1,10 +1,12 @@
-import { Inter } from 'next/font/google';
+import { Figtree } from 'next/font/google';
 import './globals.css';
+import Sidebar from '@/Components/Sidebar';
 
-const inter = Inter({ subsets: ['latin'] });
+const font = Figtree({ subsets: ['latin'] });
 
 export const metadata = {
   title: "Full Stack Spotify Clone",
+  description: "Listen To Music!"
 }
 
 export default function RootLayout({
@@ -15,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={inter.className}
+        className={font.className}
       >
-        {children}
+        <Sidebar>
+          {children}
+        </Sidebar>
       </body>
     </html>
   )
