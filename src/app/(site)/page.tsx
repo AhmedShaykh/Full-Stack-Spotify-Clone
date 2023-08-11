@@ -1,12 +1,13 @@
 import React from 'react';
+import Header from '@/Components/Header';
 
 const Home = () => {
     return (
-        <>
-            <h1 className='text-green-500'>
-                Welcome to the Spotify!
-            </h1>
-        </>
+        <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
+            <Header>
+                Header
+            </Header>
+        </div>
     )
 }
 
