@@ -1,8 +1,9 @@
-import { Figtree } from 'next/font/google';
-import './globals.css';
-import Sidebar from '@/Components/Sidebar';
+import { Figtree } from "next/font/google";
+import Sidebar from "@/Components/Sidebar";
+import SupabaseProvider from "@/Providers/SupabaseProvider";
+import "./globals.css";
 
-const font = Figtree({ subsets: ['latin'] });
+const font = Figtree({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Full Stack Spotify Clone",
@@ -19,9 +20,11 @@ export default function RootLayout({
       <body
         className={font.className}
       >
-        <Sidebar>
-          {children}
-        </Sidebar>
+        <SupabaseProvider>
+          <Sidebar>
+            {children}
+          </Sidebar>
+        </SupabaseProvider>
       </body>
     </html>
   )
