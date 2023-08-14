@@ -1,12 +1,13 @@
 "use client";
 import React, { FC } from "react";
-import { useRouter } from "next/navigation";
+import useAuthModal from "@/Hooks/useAuthModal";
 import Button from "./Button";
+import { useRouter } from "next/navigation";
+import { twMerge } from "tailwind-merge";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { HiHome } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
 import { FaUserAlt } from "react-icons/fa";
-import { twMerge } from "tailwind-merge";
 
 interface HeaderProps {
     children: React.ReactNode;
@@ -16,6 +17,8 @@ interface HeaderProps {
 const Header: FC<HeaderProps> = ({
     children, className
 }) => {
+
+    const authModal = useAuthModal();
 
     const router = useRouter();
 
@@ -60,7 +63,7 @@ const Header: FC<HeaderProps> = ({
                         <div>
                             <Button
                                 className="bg-transparent text-neutral-300 font-medium"
-                                onClick={() => { }}
+                                onClick={authModal.onOpen}
                             >
                                 Sign Up
                             </Button>
@@ -68,7 +71,7 @@ const Header: FC<HeaderProps> = ({
                         <div>
                             <Button
                                 className="bg-white px-6 py-2"
-                                onClick={() => { }}
+                                onClick={authModal.onOpen}
                             >
                                 Login
                             </Button>
