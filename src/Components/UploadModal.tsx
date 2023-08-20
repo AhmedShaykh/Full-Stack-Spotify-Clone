@@ -2,15 +2,27 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
 import Input from "./Input";
+import Button from "./Button";
+import { useUser } from "@/Hooks/useUser";
 import useUploadModal from "@/Hooks/useUploadModal";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import Button from "./Button";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import uniqid from "uniqid";
 
 const UploadModal = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
+    const supabaseClient = useSupabaseClient();
+
     const uploadModal = useUploadModal();
+
+    const { user } = useUser();
+
+    const router = useRouter();
+
 
     const {
         register,
@@ -40,7 +52,88 @@ const UploadModal = () => {
 
         try {
 
+            setIsLoading(true);
+
+            const imageFile = values.image?.[0];
+
+            const songFile = values.song?.[0];
+
+            if (!imageFile || !songFile || !user) {
+
+                toast.error("Missing Fields");
+
+                return;
+            }
+
+            const uniqueID = uniqid();
+
+            const {
+                data: songData,
+                error: songError
+            } = await supabaseClient
+                .storage
+                .from("songs")
+                .upload(`song-${values.title}-${uniqueID}`, songFile, {
+                    cacheControl: "3600",
+                    upsert: false
+                });
+
+            if (songError) {
+
+                setIsLoading(false);
+
+                return toast.error("Failed Song Upload");
+            }
+
+            const {
+                data: imageData,
+                error: imageError
+            } = await supabaseClient
+                .storage
+                .from("images")
+                .upload(`image-${values.title}-${uniqueID}`, imageFile, {
+                    cacheControl: "3600",
+                    upsert: false
+                });
+
+            if (imageError) {
+
+                setIsLoading(false);
+
+                return toast.error("Failed Image Upload");
+            }
+
+            const { error: supabaseError } = await supabaseClient
+                .from("songs")
+                .insert({
+                    user_id: user.id,
+                    title: values.title,
+                    author: values.author,
+                    image_path: imageData.path,
+                    song_path: songData.path
+                });
+
+            if (supabaseError) {
+                return toast.error(supabaseError.message);
+            }
+
+            router.refresh();
+
+            setIsLoading(false);
+
+            toast.success("Track Upload!");
+
+            reset();
+
+            uploadModal.onClose();
+
         } catch (error) {
+
+            toast.error("Something Went Wrong");
+
+        } finally {
+
+            setIsLoading(false);
 
         }
     };
@@ -65,7 +158,7 @@ const UploadModal = () => {
                 <Input
                     id="artist"
                     disabled={isLoading}
-                    {...register('artist', { required: true })}
+                    {...register("artist", { required: true })}
                     placeholder="Artist Name"
                 />
                 <div>
@@ -78,7 +171,7 @@ const UploadModal = () => {
                         type="file"
                         accept=".mp3"
                         id="song"
-                        {...register('song', { required: true })}
+                        {...register("song", { required: true })}
                     />
                 </div>
                 <div>
@@ -91,7 +184,7 @@ const UploadModal = () => {
                         type="file"
                         accept="image/*"
                         id="image"
-                        {...register('image', { required: true })}
+                        {...register("image", { required: true })}
                     />
                 </div>
                 <Button disabled={isLoading} type="submit">
