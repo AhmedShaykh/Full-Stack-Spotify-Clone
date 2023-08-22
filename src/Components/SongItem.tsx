@@ -19,7 +19,7 @@ const SongItem: FC<SongItemProps> = ({
     return (
         <div
             className="relative groupflex flex-col items-center justify-center rounded-md overflow-hidden gap-x-4 bg-neutral-400/5 cursor-pointer hover:bg-neutral-400/10 transition p-2"
-            onClick={() => { }}
+            onClick={() => onClick(data.id)}
         >
             <div
                 className="relative aspect-square rounded-md overflow-hidden"
