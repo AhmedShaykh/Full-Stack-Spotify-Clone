@@ -3,10 +3,16 @@ import React, { FC } from "react";
 import useAuthModal from "@/Hooks/useAuthModal";
 import useUploadModal from "@/Hooks/useUploadModal";
 import { useUser } from "@/Hooks/useUser";
+import { Song } from "../../Types";
+import MediaItem from "./MediaItem";
 import { TbPlaylist } from "react-icons/tb";
 import { AiOutlinePlus } from "react-icons/ai";
 
-const Library: FC = () => {
+interface Prop {
+    songs: Song[];
+};
+
+const Library: FC<Prop> = ({ songs }) => {
 
     const { user, subscription } = useUser();
 
@@ -43,7 +49,13 @@ const Library: FC = () => {
                 />
             </div>
             <div className="flex flex-col gap-y-2 mt-4 px-3">
-                Songs Lists
+                {songs.map((item) => (
+                    <MediaItem
+                        onClick={() => { }}
+                        key={item.id}
+                        data={item}
+                    />
+                ))}
             </div>
         </div>
     )

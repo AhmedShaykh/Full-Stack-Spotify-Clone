@@ -1,6 +1,7 @@
 "use client";
 import React, { FC, useMemo } from "react";
 import SidebarItem from "./SidebarItem";
+import { Song } from "../../Types";
 import Library from "./Library";
 import Box from "./Box";
 import { usePathname } from "next/navigation";
@@ -9,10 +10,11 @@ import { BiSearch } from "react-icons/bi";
 
 interface SidebarProps {
     children: React.ReactNode;
+    songs: Song[];
 };
 
 const Sidebar: FC<SidebarProps> = ({
-    children
+    children, songs
 }) => {
 
     const pathname = usePathname();
@@ -45,7 +47,7 @@ const Sidebar: FC<SidebarProps> = ({
                 </Box>
 
                 <Box className="overflow-y-auto h-full">
-                    <Library />
+                    <Library songs={songs} />
                 </Box>
             </div>
 

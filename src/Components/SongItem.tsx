@@ -38,7 +38,7 @@ const SongItem: FC<SongItemProps> = ({
                 </p>
                 <p
                     className="text-neutral-400 text-sm pb-4 w-full truncate">
-                    By {data.author}
+                    {data.author}
                 </p>
             </div>
 
