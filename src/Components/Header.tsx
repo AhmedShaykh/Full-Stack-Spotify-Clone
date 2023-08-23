@@ -2,6 +2,7 @@
 import React, { FC } from "react";
 import useAuthModal from "@/Hooks/useAuthModal";
 import { useUser } from "@/Hooks/useUser";
+import usePlayer from "@/Hooks/usePlayer";
 import Button from "./Button";
 import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
@@ -27,13 +28,15 @@ const Header: FC<HeaderProps> = ({
 
     const supabaseClient = useSupabaseClient();
 
+    const player = usePlayer();
+
     const { user } = useUser();
 
     const handleLogout = async () => {
 
         const { error } = await supabaseClient.auth.signOut();
 
-        // player.reset();
+        player.reset();
 
         router.refresh();
 
@@ -67,13 +70,13 @@ const Header: FC<HeaderProps> = ({
                 <div className="flex md:hidden gap-x-2 items-center">
                     <button
                         className="rounded-full p-2 bg-white flex items-center justify-center cursor-pointer hover:opacity-75 transition"
-                        onClick={() => router.push('/')}
+                        onClick={() => router.push("/")}
                     >
                         <HiHome className="text-black" size={20} />
                     </button>
                     <button
                         className="rounded-full p-2 bg-white flex items-center justify-center cursor-pointer hover:opacity-75 transition"
-                        onClick={() => router.push('/search')}
+                        onClick={() => router.push("/search")}
                     >
                         <BiSearch className="text-black" size={20} />
                     </button>
@@ -88,7 +91,7 @@ const Header: FC<HeaderProps> = ({
                                 Logout
                             </Button>
                             <Button
-                                onClick={() => router.push('/account')}
+                                onClick={() => router.push("/")}
                                 className="bg-white"
                             >
                                 <FaUserAlt />
