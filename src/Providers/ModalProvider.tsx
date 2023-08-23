@@ -1,13 +1,9 @@
 "use client";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AuthModal from "@/Components/AuthModal";
 import UploadModal from "@/Components/UploadModal";
 
-interface ModalProviderProps {
-    // products: ProductWithPrice[];
-};
-
-const ModalProvider: FC = () => {
+const ModalProvider = () => {
 
     const [isMounted, setIsMounted] = useState<boolean>(false);
 
